@@ -80,6 +80,10 @@ class DreoHumidifierHA(DreoBaseDeviceHA, HumidifierEntity):
     def target_humidity(self) -> float:
         """Return the humidity level we try to reach."""
         return self.device.target_humidity
+
+    @property
+    def hotfogon(self) -> bool:
+        return self.device.hotfogon
     
     def turn_on(self, **kwargs: any) -> None:
         """Turn the device on."""

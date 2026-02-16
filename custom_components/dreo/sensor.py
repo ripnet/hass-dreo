@@ -48,6 +48,7 @@ from .pydreo.pydreohumidifier import (
     MODE_AUTO,
     MODE_SLEEP,
     LIGHT_ON,
+    LIGHT_LOW,
     LIGHT_OFF,
 )
 
@@ -128,7 +129,7 @@ SENSORS: tuple[DreoSensorEntityDescription, ...] = (
         key="Ambient Light Humidifier",
         translation_key="light_HM",
         device_class=SensorDeviceClass.ENUM,
-        options=[LIGHT_ON, LIGHT_OFF],
+        options=[LIGHT_ON, LIGHT_LOW, LIGHT_OFF],
         value_fn=lambda device: device.rgblevel,
         exists_fn=lambda device: (device.type in { DreoDeviceType.HUMIDIFIER }) and device.is_feature_supported(RGB_LEVEL),
     ),

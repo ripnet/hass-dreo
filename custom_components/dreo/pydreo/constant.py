@@ -53,6 +53,7 @@ ATMBRI_KEY = 'atmbri'
 ATMMODE_KEY = 'atmmode'
 RGB_LEVEL = 'rgblevel'
 SCHEDULE_ENABLE = 'scheon'
+HOTFOGON_KEY = 'hotfogon'
 
 # Preferences Names
 # It's possible we should switch to IDs instead of names

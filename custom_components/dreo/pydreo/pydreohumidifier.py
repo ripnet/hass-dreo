@@ -11,7 +11,8 @@ from .constant import (
     HUMIDITY_KEY,
     TARGET_AUTO_HUMIDITY_KEY,
     RGB_LEVEL,
-    SCHEDULE_ENABLE     
+    SCHEDULE_ENABLE,     
+    HOTFOGON_KEY
 )
 
 from .helpers import Helpers
@@ -31,6 +32,7 @@ WATER_LEVEL_EMPTY = "Empty"
 
 LIGHT_ON = "Enable"
 LIGHT_OFF = "Disabled"
+LIGHT_LOW = "Low"
 
 WATER_LEVEL_STATUS_MAP = {
     0: WATER_LEVEL_OK,
@@ -41,8 +43,10 @@ WATER_LEVEL_STATUS_MAP = {
 
 RGB_MAP = {
     0: LIGHT_OFF,
+    1: LIGHT_LOW,
     2: LIGHT_ON,
     LIGHT_OFF: 0,
+    LIGHT_LOW: 1,
     LIGHT_ON: 2
 }
 
@@ -73,6 +77,7 @@ class PyDreoHumidifier(PyDreoBaseDevice):
         self._worktime = None
         self._rgblevel = None
         self._scheon = None
+        self._hotfogon = None
         
     def parse_modes(self, details: Dict[str, list]) -> tuple[str, int]:
         """Parse the preset modes from the details."""
@@ -192,6 +197,16 @@ class PyDreoHumidifier(PyDreoBaseDevice):
             _LOGGER.debug("scheon: scheon - value already %s, skipping command", value)
             return
         self._send_command(SCHEDULE_ENABLE, value)        
+
+
+    @property
+    def hotfogon(self):
+        return self._hotfogon
+
+    @hotfogon.setter
+    def hotfogon(self, value: bool):
+        self._send_command(HOTFOGON_KEY, value)
+
     @mode.setter
     def mode(self, value: str) -> None:
         numeric_value = Helpers.value_from_name(self._modes, value)
@@ -216,6 +231,7 @@ class PyDreoHumidifier(PyDreoBaseDevice):
         self._worktime = self.get_state_update_value(state, WORKTIME_KEY)
         self._rgblevel = self.get_state_update_value_mapped(state, RGB_LEVEL, RGB_MAP)
         self._scheon = self.get_state_update_value(state, SCHEDULE_ENABLE)
+        self._hotfogon = self.get_state_update_value(state, HOTFOGON_KEY)
         
     def handle_server_update(self, message):
         """Process a websocket update"""
@@ -261,3 +277,8 @@ class PyDreoHumidifier(PyDreoBaseDevice):
         if isinstance(val_target_humidity, int):
             self._target_humidity = val_target_humidity
             _LOGGER.debug("handle_server_update: handle_server_update - target_humidity is %s", self._target_humidity)
+
+        val_hotfogon = self.get_server_update_key_value(message, HOTFOGON_KEY)
+        if isintance(val_hotfogon, bool):
+            self._hotfogon = val_hotfogon
+            _LOGGER.debug("PyDreoHumidifier:handle_server_update - warm mist is %s", self._hotfogon)

@@ -120,7 +120,13 @@ SWITCHES: tuple[DreoSwitchEntityDescription, ...] = (
         translation_key="scheon",
         attr_name="scheon",
         icon="mdi:calendar",
-    )  
+    ),  
+    DreoSwitchEntityDescription(
+        key="Warm Mist",
+        translation_key="hotfogon",
+        attr_name="hotfogon",
+        icon="mdi:heat-wave",
+    )
 )
 
 def get_entries(pydreo_devices : list[PyDreoBaseDevice]) -> list[DreoSwitchHA]:
