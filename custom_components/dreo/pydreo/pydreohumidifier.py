@@ -279,6 +279,6 @@ class PyDreoHumidifier(PyDreoBaseDevice):
             _LOGGER.debug("handle_server_update: handle_server_update - target_humidity is %s", self._target_humidity)
 
         val_hotfogon = self.get_server_update_key_value(message, HOTFOGON_KEY)
-        if isintance(val_hotfogon, bool):
+        if isinstance(val_hotfogon, bool):
             self._hotfogon = val_hotfogon
             _LOGGER.debug("PyDreoHumidifier:handle_server_update - warm mist is %s", self._hotfogon)
